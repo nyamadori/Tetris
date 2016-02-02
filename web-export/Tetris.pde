@@ -68,72 +68,174 @@ class Field {
     this.field = new int[20][10];
   }
 }
+// 参考: テトリミノの形状と回転軸について
+//http://www13.plala.or.jp/TETRiS_TGM/kouza/index.htm
+
 abstract class Tetrimino {
-  private int[][] shape;
+  protected int[][][] shapes;
+  protected int rotateAngle;
+  protected int x;
+  protected int y;
   
-  public int[][] getShape() {
-    return this.shape;
+  public Tetrimino() {
+    
+  }
+  
+  public int[][] currentShape() {
+    return shapes[rotateAngle % shapes.length];
+  }
+  
+  public void rotateLeft() {
+    rotateAngle = rotateAngle == 0 ? shapes.length : rotateAngle;
+    rotateAngle--;
+  }
+  
+  public void rotateRight() {
+    rotateAngle++;
   }
 }
 
 class ITetrimino extends Tetrimino {  
   public ITetrimino() {
-    this.shape = new int[][] {
-      { 1, 1, 1, 1 },
+    this.shapes = new int[][][] {
+      {
+        { 0, 0, 0, 0 },
+        { 1, 1, 1, 1 },
+        { 0, 0, 0, 0 },
+        { 0, 0, 0, 0 },
+      },
+      {
+        { 0, 0, 1, 0 },
+        { 0, 0, 1, 0 },
+        { 0, 0, 1, 0 },
+        { 0, 0, 1, 0 },
+      },
     };
   }
 }
 
 class OTetrimino implements Tetrimino {  
   public OTetrimino() {
-    this.shape = new int[][] {
-      { 1, 1 },
-      { 1, 1 },
+    this.shapes = new int[][][] {
+      {
+        { 1, 1 },
+        { 1, 1 },
+      }
     };
   }
 }
 
 class STetrimino implements Tetrimino {  
   public STetrimino() {
-    this.shape = new int[][] {
-      { 0, 1, 1 },
-      { 1, 1, 0 },
+    this.shapes = new int[][][] {
+      {
+        { 0, 0, 0 },
+        { 0, 1, 1 },
+        { 1, 1, 0 },
+      },
+      {
+        { 1, 0, 0 },
+        { 1, 1, 0 },
+        { 0, 1, 0 },
+      },
     };
   }
 }
 
 class ZTetrimino implements Tetrimino {  
   public ZTetrimino() {
-    this.shape = new int[][] {
-      { 1, 1, 0 },
-      { 0, 1, 1 },
+    this.shapes = new int[][][] {
+      {
+        { 0, 0, 0 },
+        { 1, 1, 0 },
+        { 0, 1, 1 },
+      },
+      {
+        { 0, 0, 1 },
+        { 0, 1, 1 },
+        { 0, 1, 0 },
+      }
     };
   }
 }
 
 class JTetrimino implements Tetrimino {  
   public JTetrimino() {
-    this.shape = new int[][] {
-      { 1, 0, 0 },
-      { 1, 1, 1 },
+    this.shapes = new int[][][] {
+      {
+        { 0, 0, 0 },
+        { 1, 1, 1 },
+        { 0, 0, 1 },
+      },
+      {
+        { 0, 1, 0 },
+        { 0, 1, 0 },
+        { 1, 1, 0 },
+      },
+      {
+        { 0, 0, 0 },
+        { 1, 0, 0 },
+        { 1, 1, 1 },
+      },
+      {
+        { 0, 1, 1 },
+        { 0, 1, 0 },
+        { 0, 1, 0 },
+      },
     };
   }
 }
 
 class LTetrimino implements Tetrimino {  
   public LTetrimino() {
-    this.shape = new int[][] {
-      { 0, 0, 1 },
-      { 1, 1, 1 },
+    this.shapes = new int[][][] {
+      {
+        { 0, 0, 0 },
+        { 1, 1, 1 },
+        { 1, 0, 0 },
+      },
+      {
+        { 1, 1, 0 },
+        { 0, 1, 0 },
+        { 0, 1, 0 },
+      },
+      {
+        { 0, 0, 0 },
+        { 0, 0, 1 },
+        { 1, 1, 1 },
+      },
+      {
+        { 0, 1, 0 },
+        { 0, 1, 0 },
+        { 0, 1, 1 },
+      },
     };
   }
 }
 
 class TTetrimino implements Tetrimino {  
   public TTetrimino() {
-    this.shape = new int[][] {
-      { 0, 1, 0 },
-      { 1, 1, 1 },
+    this.shapes = new int[][][] {
+      {
+        { 0, 0, 0 },
+        { 1, 1, 1 },
+        { 0, 1, 0 },
+      },
+      {
+        { 0, 1, 0 },
+        { 1, 1, 0 },
+        { 0, 1, 0 },
+      },
+      {
+        { 0, 0, 0 },
+        { 0, 1, 0 },
+        { 1, 1, 1 },
+      },
+      {
+        { 0, 1, 0 },
+        { 0, 1, 1 },
+        { 0, 1, 0 },
+      },
     };
   }
 }

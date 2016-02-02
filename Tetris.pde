@@ -1,63 +1,64 @@
 // Tetris
 
-int field[][] = {
-  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 1, 1, 1, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-  { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-};
-
-int N_ROW = field.length;
-int N_COL = field[0].length;
-int prevFrameCount;
+int prevFallTime, prevInputTime;
+Field field;
+Tetrimino t;
 
 void setup() {
   size(600, 400);
+  field = new Field();
+  t = new TTetrimino(field);
+  field.put(t);
 }
 
 void draw() {
-  background(0);
+//  processInput();
+  fallTetrimino();
   
-  for (int i = 0; i < N_ROW; i++) {
-    for (int j = 0; j < N_COL; j++) {
-      switch (field[i][j]) {
+  background(0);
+  drawBlocks();
+}
+
+void keyPressed() {
+//  if (millis() - prevInputTime < 80) return;
+  
+//  if (keyPressed) {
+    switch (keyCode) {
+    case LEFT:
+      t.moveLeft();
+      prevInputTime = millis();
+
+      break;
+    case RIGHT:
+      t.moveRight();
+      prevInputTime = millis();
+
+      break;
+    case UP:
+      t.rotateLeft();prevInputTime = millis();
+      break;
+    case DOWN:
+      t.rotateRight();prevInputTime = millis();
+      break;
+    }
+//  }
+  
+}
+
+void drawBlocks() {
+  for (int i = 0; i < field.rowCount(); i++) {
+    for (int j = 0; j < field.columnCount(); j++) {
+      switch (field.getBlock(j, i)) {
       case 1:
         rect(j * 16, i * 16, 16, 16);
       }
     }
   }
-  
-  fallBlocks();
 }
 
-void fallBlocks() {
-  if (frameCount - prevFrameCount < 20) return;
+void fallTetrimino() {
+  if (millis() - prevFallTime < 300) return;
   
-  for (int i = N_ROW - 2; i >= 0; i--) {
-    for (int j = 0; j < N_COL; j++) {
-      if (field[i + 1][j] == 1) continue;
-      
-      int b = field[i][j];
-      field[i + 1][j] = b;
-      field[i][j] = 0;
-    }
-  }
-  
-  prevFrameCount = frameCount;
+  t.fall();
+  prevFallTime = millis();
 }
