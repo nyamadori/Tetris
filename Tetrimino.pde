@@ -1,6 +1,16 @@
 // 参考: テトリミノの形状と回転軸について
 //http://www13.plala.or.jp/TETRiS_TGM/kouza/index.htm
 
+final Class<?>[] TETRIMINO_CLASSES = {
+  ITetrimino.class,
+  OTetrimino.class,
+  ZTetrimino.class,
+  STetrimino.class,
+  JTetrimino.class,
+  LTetrimino.class,
+  TTetrimino.class
+};
+
 abstract class Tetrimino {
   protected int[][][] shapes;
   protected int rotateAngle;

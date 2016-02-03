@@ -1,16 +1,24 @@
+import java.util.*;
+
 class Field {
-  private int field[][];
+  private List<int[]> field;
   
-  public Field() {
-    this.field = new int[20][10];
-    this.field[16] = new int[] { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1 };
-    this.field[17] = new int[] { 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 };
-    this.field[18] = new int[] { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1 };
-    this.field[19] = new int[] { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1 };
+  public Field(int w, int h) {
+    this.field = new ArrayList<int[]>();
+    
+    while (h > 0) {
+      this.field.add(new int[w]);
+      h--;
+    }
+    
+    this.field.set(15, new int[] { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1 });
+    this.field.set(16, new int[] { 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 });
+    this.field.set(17, new int[] { 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 });
+    this.field.set(18, new int[] { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1 });
+    this.field.set(19, new int[] { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1 });
   }
   
   public void put(Tetrimino t) {
-    println(t.isFixed(), t.isLanded());
     for (int ty = 0; ty < t.shapeSize(); ty++) {
       for (int tx = 0; tx < t.shapeSize(); tx++) {
         if (!t.hasBlock(tx, ty)) continue;
@@ -52,7 +60,7 @@ class Field {
   public int eraseLines() {
     int nEraseLines = 0;
     
-    for (int y = 0; y < rowCount(); y++) {
+    for (int y = 0; y < rowCount(); ) {
       boolean canErase = true;
       
       for (int x = 0; x < columnCount(); x++) {
@@ -63,45 +71,39 @@ class Field {
       }
       
       if (canErase) {
-        field[y] = new int[columnCount()];
+        field.remove(y);
+        nEraseLines++;
+      } else {
+        y++;
       }
     }
     
+    for (int i = 0; i < nEraseLines; i++) {
+      field.add(0, new int[columnCount()]); //<>//
+    }
+
     return nEraseLines;
-  }
-  
-  public void pushErasedLines() {
-    for (int y = rowCount() - 1; y >= 1; y--) {
-      for (int x = 0; x < columnCount(); x++) {
-        if (!hasBlock(x, y)) {
-          setBlock(x, y, getBlock(x, y - 1));
-          setBlock(x, y - 1, 0);
-        }
-      }
-    }
-    
-    field[0] = new int[columnCount()];
   }
   
   public void setBlock(int x, int y, int b) {
     if (x < 0 || x >= columnCount() || y < 0 || y >= rowCount()) return;
     
-    field[y][x] = b;
+    field.get(y)[x] = b;
   }
   
   public int getBlock(int x, int y) {
-    return field[y][x];
+    return field.get(y)[x];
   }
   
   public boolean hasBlock(int x, int y) {
-    return field[y][x] != 0;
+    return field.get(y)[x] != 0;
   }
   
   public int rowCount() {
-    return field.length;
+    return field.size();
   }
   
   public int columnCount() {
-    return field[0].length; 
+    return field.get(0).length; 
   }
 }
