@@ -7,6 +7,8 @@ abstract class Tetrimino {
   protected int x;
   protected int y;
   protected Field field;
+  protected boolean _isFixed;
+  protected boolean _isLanded;
   
   public Tetrimino(Field field) {
     this.field = field;
@@ -17,6 +19,8 @@ abstract class Tetrimino {
   }
   
   public void rotateLeft() {
+    if (isFixed()) return;
+    
     field.unput(this);
     rotateAngle = rotateAngle == 0 ? shapes.length : rotateAngle;
     rotateAngle--;
@@ -30,6 +34,8 @@ abstract class Tetrimino {
   }
   
   public void rotateRight() {
+    if (isFixed()) return;
+
     field.unput(this);
     rotateAngle++;
 
@@ -41,30 +47,48 @@ abstract class Tetrimino {
     }
   }
 
-  public void move(int vx, int vy) {
+  public void fall() {
+    if (isFixed()) return;
+
     field.unput(this);
-    x += vx;
-    y += vy;
+    y++;
     
     if (field.canPut(this)) {
       field.put(this);
     } else {
-      x -= vx;
-      y -= vy;
+      y--;
+      
       field.put(this);
+      _isLanded = true;
     }
-  }
-
-  public void fall() {
-    move(0, 1);
   }
   
   public void moveLeft() {
-    move(-1, 0);
+    if (isFixed()) return;
+
+    field.unput(this);
+    x--;
+    
+    if (field.canPut(this)) {
+      field.put(this);
+    } else {
+      x++;
+      field.put(this);
+    }
   }
   
   public void moveRight() {
-    move(1, 0);
+    if (isFixed()) return;
+
+    field.unput(this);
+    x++;
+    
+    if (field.canPut(this)) {
+      field.put(this);
+    } else {
+      x--;
+      field.put(this);
+    }
   }
   
   public void setX(int val) {
@@ -93,6 +117,18 @@ abstract class Tetrimino {
   
   public int shapeSize() {
     return shapes[0].length;
+  }
+  
+  public void fix() {
+    this._isFixed = true;
+  }
+  
+  public boolean isFixed() {
+    return this._isFixed;
+  }
+  
+  public boolean isLanded() {
+    return this._isLanded;
   }
 }
 

@@ -3,10 +3,14 @@ class Field {
   
   public Field() {
     this.field = new int[20][10];
-    this.field[19][0] = 1;
+    this.field[16] = new int[] { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1 };
+    this.field[17] = new int[] { 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 };
+    this.field[18] = new int[] { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1 };
+    this.field[19] = new int[] { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1 };
   }
   
-  public void put(Tetrimino t) {    
+  public void put(Tetrimino t) {
+    println(t.isFixed(), t.isLanded());
     for (int ty = 0; ty < t.shapeSize(); ty++) {
       for (int tx = 0; tx < t.shapeSize(); tx++) {
         if (!t.hasBlock(tx, ty)) continue;
@@ -43,6 +47,40 @@ class Field {
     }
     
     return true;
+  }
+  
+  public int eraseLines() {
+    int nEraseLines = 0;
+    
+    for (int y = 0; y < rowCount(); y++) {
+      boolean canErase = true;
+      
+      for (int x = 0; x < columnCount(); x++) {
+        if (!hasBlock(x, y)) {
+          canErase = false;
+          break;
+        }
+      }
+      
+      if (canErase) {
+        field[y] = new int[columnCount()];
+      }
+    }
+    
+    return nEraseLines;
+  }
+  
+  public void pushErasedLines() {
+    for (int y = rowCount() - 1; y >= 1; y--) {
+      for (int x = 0; x < columnCount(); x++) {
+        if (!hasBlock(x, y)) {
+          setBlock(x, y, getBlock(x, y - 1));
+          setBlock(x, y - 1, 0);
+        }
+      }
+    }
+    
+    field[0] = new int[columnCount()];
   }
   
   public void setBlock(int x, int y, int b) {

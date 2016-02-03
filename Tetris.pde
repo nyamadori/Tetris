@@ -7,42 +7,40 @@ Tetrimino t;
 void setup() {
   size(600, 400);
   field = new Field();
-  t = new TTetrimino(field);
+  t = new ITetrimino(field);
   field.put(t);
 }
 
 void draw() {
-//  processInput();
+  background(0);
   fallTetrimino();
   
-  background(0);
+  if (t.isLanded()) {
+    t.fix();
+    field.eraseLines();
+    field.pushErasedLines();
+  }
+  
   drawBlocks();
 }
 
 void keyPressed() {
-//  if (millis() - prevInputTime < 80) return;
-  
-//  if (keyPressed) {
-    switch (keyCode) {
-    case LEFT:
-      t.moveLeft();
-      prevInputTime = millis();
+  switch (keyCode) {
+  case LEFT:
+    t.moveLeft();
 
-      break;
-    case RIGHT:
-      t.moveRight();
-      prevInputTime = millis();
+    break;
+  case RIGHT:
+    t.moveRight();
 
-      break;
-    case UP:
-      t.rotateLeft();prevInputTime = millis();
-      break;
-    case DOWN:
-      t.rotateRight();prevInputTime = millis();
-      break;
-    }
-//  }
-  
+    break;
+  case UP:
+    t.rotateLeft();
+    break;
+  case DOWN:
+    t.rotateRight();
+    break;
+  }
 }
 
 void drawBlocks() {
@@ -60,5 +58,6 @@ void fallTetrimino() {
   if (millis() - prevFallTime < 300) return;
   
   t.fall();
+
   prevFallTime = millis();
 }
