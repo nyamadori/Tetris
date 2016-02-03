@@ -10,12 +10,6 @@ class Field {
       this.field.add(new int[w]);
       h--;
     }
-    
-    this.field.set(15, new int[] { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1 });
-    this.field.set(16, new int[] { 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 });
-    this.field.set(17, new int[] { 1, 0, 1, 1, 1, 0, 1, 1, 1, 1 });
-    this.field.set(18, new int[] { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1 });
-    this.field.set(19, new int[] { 1, 0, 1, 1, 1, 1, 1, 1, 1, 1 });
   }
   
   public void put(Tetrimino t) {
